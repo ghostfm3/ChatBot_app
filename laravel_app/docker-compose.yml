@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  database:
+    image: postgres
+    container_name: DB_ChatBot_PG
+    restart: unless-stopped
+    environment: 
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: ChatBot_app
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+    ports:
+      - '5438:5432'
+  php-apache:
+   container_name: ChatBot_app_laravel
+   build:
+     context: ./php
+   ports:
+     - '8085:80'
+   networks:
+     - pythonapi_default
+   volumes:
+     - ./src:/var/www/ChatBot_app_laravel
+     - ./apache/default.conf:/etc/apache2/sites-enabled/000-default.conf
+   depends_on:
+     - database
+networks:
+    pythonapi_default:
+      external: true
