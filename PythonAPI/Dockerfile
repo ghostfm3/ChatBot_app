@@ -19,9 +19,12 @@ RUN cd gpt-2 && pip3 install -r requirements.txt
 
 # FastAPIとその依存関係をインストール
 RUN pip3 install fastapi uvicorn torch transformers
+RUN pip install --upgrade tqdm
+RUN pip install sentencepiece
+RUN pip install protobuf==3.20.0
 
 # srcディレクトリをコピー
 COPY src /app/src
 
 # FastAPIアプリケーションを起動
-CMD ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8070"]
+CMD ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8010"]

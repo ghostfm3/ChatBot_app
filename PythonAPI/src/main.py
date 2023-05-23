@@ -1,7 +1,9 @@
 from fastapi import FastAPI
+#from res_gpt import generate_reply
 
 app = FastAPI()
 
-@app.get("/")
-def get_hello():
-    return {"message": "Hello", "id": 12345}
+@app.post("/")
+async def get_gpt(data:str):
+    response = generate_reply(data)
+    return {"prompt": f"{data}", "response": f"{response}"}

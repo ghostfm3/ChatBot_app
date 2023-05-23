@@ -18,4 +18,5 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/test',[TestApiController::class, 'index']);
+// Route::get('/test',[TestApiController::class, 'index']);
+Route::resource('test',TestApiController::class);
