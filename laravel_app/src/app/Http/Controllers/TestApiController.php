@@ -4,34 +4,59 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http; 
+use Illuminate\Support\Facades\Log;
+use App\Models\ChatRes;
 
 class TestApiController extends Controller
 {
     
-    public function index(){       
-        return view('test');
+    public function index(){ 
+        $chatreses = ChatRes::all();     
+        Log::info($chatreses); 
+        return view('test', [
+            'chatreses' => $chatreses
+        ]);
     }
 
     public function store(Request $request){
         $request->validate([
             'prompt' => 'required|max:100',
         ]);
-    
+
         $text = $request->prompt;
-        $data = $this->test_api($text);
+        $nowTime = date('Y-m-d H:i:s');
+
+        $chatres_in = new ChatRes();
+        $chatres_in -> prompt = $text;
+        $chatres_in -> response = $this->test_api($text);
+        $chatres_in -> created_at = $nowTime;
+        $chatres_in -> updated_at = $nowTime;
+        $chatres_in -> save();
         
-        return view('test')->with([
-            'prompts' => [$text],
-            'tests' => [$data],
-        ]);
+        return redirect("/test");
     }
     
     public function test_api($text){
         $url = "http://app:8076/?data=" . $text;
-        $response = Http::post($url);
-        $responseData = $response->json();
-        $res_text = $responseData["response"];
-        return $res_text;
+
+        try {
+            $response = Http::post($url);
+            $responseData = $response->json();
+            $res_text = $responseData["response"];
+
+            return $res_text;
+        } catch (\Exception $e) {
+            Log::error('APIリクエストエラー: ' . $e->getMessage());
+            $res_text = "API取得エラー";
+
+            return $res_text;
+        };
+    }
+
+    public function destroy()
+    {
+        ChatRes::truncate();
+        return redirect("/test");
     }
 
 }

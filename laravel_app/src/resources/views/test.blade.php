@@ -1,45 +1,61 @@
-<!-- app.blade.php -->
 <!DOCTYPE html>
 <html>
 <head>
   <meta charset="utf-8">
   <link rel="stylesheet" type="text/css" href="test.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
   <title>ChatBot Demo</title>
 </head>
 <header>
 @include('layouts.header')
 </header>
 <body>
-<!-- @foreach ($errors->all() as $error)
-<p> {{$error}}</p>
-@endforeach   -->
 <center>
     <div class="container">
         <div class="chatbox">
-            @isset ($prompts)
+            @foreach ($chatreses as $chatres)
             <div class="message outgoing">
                 <div class="message-body">
-                    <p>{{$prompts[0]}}</p>
+                    <p>{{$chatres->prompt}}</p>
                 </div>
             </div>
-            @endisset
-            @isset ($tests)
             <div class="message incoming">
-                <div ><img class="user-photo" src="sozai-rei-yumesaki-mini-close-blank.png"></div>
+                <div ><img class="user-photo" src="sozai-rei-yumesaki-hyokkori-1.png"></div>
                 <div class="message-body">
-                    <p>{{$tests[0]}}</p>
+                    <p>{{$chatres->response}}</p>
                 </div>
             </div>
-            @endisset
+            @endforeach
+            @foreach ($errors->all() as $error)
+            <div class="message incoming">
+                <div ><img class="user-photo" src="sozai-rei-yumesaki-hyokkori-1.png"></div>
+                <div class="message-body">
+                    <p>{{$error}}</p>
+                </div>
+            </div>
+            @endforeach
         </div>
-        <form method="POST" action="{{ route('test.index') }}">
-        @csrf
-        <div class="input-area">
-            <input type="text" placeholder="Type your message..." name="prompt">
-            <input class ="submit" type="submit" id="submit_button" value="投稿"/>
-        </div>
-        </form>
+
     </div>
 </center>
 </body>
+<fooder>
+<center>
+<form method="POST" action="{{ route('test.index') }}">
+    @csrf
+    <div class="input-area">
+        <input type="text" placeholder="Type your message..." name="prompt">
+        <input class ="submit" type="submit" id="submit_button" value="投稿"/>
+    </div>
+</form>
+<form action="{{ route('test.destroy') }}" method="POST" onsubmit="return confirm('本当に削除しますか？')">
+    @csrf
+    @method('DELETE')
+    <button type="submit" class="btn btn-link">
+        <i class="fa fa-trash"></i> <!-- ゴミ箱マークのアイコン -->
+    </button>
+</form>
+</center>
+</fooder>
+
 </html>

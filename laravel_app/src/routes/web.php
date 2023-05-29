@@ -20,3 +20,6 @@ Route::get('/', function () {
 
 // Route::get('/test',[TestApiController::class, 'index']);
 Route::resource('test',TestApiController::class);
+Route::delete('/test', [TestApiController::class, 'destroy'])->name('test.destroy');
+
+

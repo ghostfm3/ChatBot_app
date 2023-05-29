@@ -1,0 +1,95 @@
+/* test.css */
+
+/* 入力欄とボタンを固定する */
+.container {
+  position: relative;
+  height: 100vh;
+}
+
+.input-area {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center; /* 中央揃え */
+  align-items: center;
+  padding: 10px;
+  background-color: #f2f2f2;
+}
+
+/* 吹き出しページのスクロールを可能にする */
+.chatbox {
+  height: calc(100% - 70px);
+  overflow-y: auto;
+  padding: 10px;
+}
+
+/* 吹き出しスタイル */
+.message {
+  display: flex;
+  align-items: center; /* 中央揃え */
+  margin-bottom: 10px;
+}
+
+.message-body {
+  padding: 10px;
+  border-radius: 10px;
+  max-width: 70%;
+  word-wrap: break-word;
+}
+
+.incoming .message-body {
+  background-color: #FFC0CB; /* ピンク色の吹き出し */
+  margin-right: auto; /* 右揃え */
+}
+
+.outgoing .message-body {
+  background-color: #ADD8E6; /* 青色の吹き出し */
+  margin-left: auto; /* 左揃え */
+}
+
+.user-photo {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+/* 入力欄のスタイル */
+.input-area input[type="text"] {
+  flex-grow: 1; /* 幅を広げる */
+  padding: 10px;
+  border: none; /* 枠線を削除 */
+  width: calc(100% - 140px); /* 幅を狭める */
+  max-width: 200px; /* 最大幅を指定 */
+}
+
+/* 投稿ボタンと削除ボタンのスタイル */
+.input-area .submit {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 50px; /* 丸みを付ける */
+  background-color: #00FF00; /* 緑色 */
+  color: #fff;
+  cursor: pointer;
+  margin-right: 10px; /* 右にマージンを追加 */
+}
+
+.input-area .delete {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 50px; /* 丸みを付ける */
+  background-color: #FF0000; /* 赤色 */
+  color: #fff;
+  cursor: pointer;
+}
+
+/* ヘッダーのスタイル */
+header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background-color: #f2f2f2;
+  padding: 10px;
+}
