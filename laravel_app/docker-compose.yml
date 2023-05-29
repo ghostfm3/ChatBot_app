@@ -19,7 +19,7 @@ services:
    build:
      context: ./php
    ports:
-     - '8085:80'
+     - '8090:80'
    networks:
      - pythonapi_default
    volumes:
