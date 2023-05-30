@@ -25,15 +25,18 @@ class TestApiController extends Controller
 
         $text = $request->prompt;
         $nowTime = date('Y-m-d H:i:s');
+        $response = $this->test_api($text);
 
         $chatres_in = new ChatRes();
         $chatres_in -> prompt = $text;
-        $chatres_in -> response = $this->test_api($text);
+        $chatres_in -> response = $response;
         $chatres_in -> created_at = $nowTime;
         $chatres_in -> updated_at = $nowTime;
         $chatres_in -> save();
-        
-        return redirect("/test");
+        // return redirect("/test");
+
+        $storeSuccess = array('status' => 'success', 'response' => $response );
+        return json_encode($storeSuccess);
     }
     
     public function test_api($text){

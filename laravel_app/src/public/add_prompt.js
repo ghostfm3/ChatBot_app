@@ -1,4 +1,5 @@
-$(function () {
+$(
+    function () {
     $("#submit_button").on('click', function (e) {
         console.log("呼び出し");
         $.ajaxSetup( {
@@ -12,14 +13,12 @@ $(function () {
      
         
         console.log(prompt)
-
         var senddata = {
-            "prompt":prompt,
-            "newDeadline":newDeadline,
+            "prompt":prompt
         }
         $.ajax({
-            type: "post",
-            url: `http://localhost:8085/todos`,
+            type: "POST",
+            url: `http://localhost:8090/test`,
             dataType: 'json',
             data: senddata
         }).done( ( res ) =>
@@ -28,11 +27,17 @@ $(function () {
             if( res["status"] == "success" )
             {
                 create_id = res["id"]
-                console.log(create_id)
+                console.log(res["response"])
                 $('#add_tag').append(`
                 <div class="message outgoing">
                 <div class="message-body">
-                    <p>${$chatres->prompt}</p>
+                    <p>${prompt}</p>
+                </div>
+                </div>
+                <div class="message incoming">
+                <div ><img class="user-photo" src="sozai-rei-yumesaki-hyokkori-1.png"></div>
+                <div class="message-body">
+                    <p>${res["response"]}</p>
                 </div>
                 </div>
                 `)
@@ -49,4 +54,5 @@ $(function () {
         }
         );
     });
-});
+    }
+);

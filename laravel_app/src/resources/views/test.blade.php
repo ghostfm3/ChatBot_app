@@ -4,6 +4,8 @@
   <meta charset="utf-8">
   <link rel="stylesheet" type="text/css" href="test.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+  <script src="add_prompt.js"></script>
   <title>ChatBot Demo</title>
 </head>
 <header>
@@ -12,7 +14,7 @@
 <body>
 <center>
     <div class="container">
-        <div class="chatbox">
+        <div class="chatbox" id="add_tag">
             @foreach ($chatreses as $chatres)
             <div class="message outgoing">
                 <div class="message-body">
@@ -42,9 +44,9 @@
 <fooder>
 <center>
 <form method="POST" action="{{ route('test.index') }}">
-    @csrf
+<meta name="csrf-token" content="{{ csrf_token() }}">
     <div class="input-area">
-        <input type="text" placeholder="Type your message..." name="prompt">
+        <input type="text" id="text" placeholder="Type your message..." name="prompt">
         <input class ="submit" type="submit" id="submit_button" value="投稿"/>
     </div>
 </form>
@@ -52,7 +54,7 @@
     @csrf
     @method('DELETE')
     <button type="submit" class="btn btn-link">
-        <i class="fa fa-trash"></i> <!-- ゴミ箱マークのアイコン -->
+        <i class="fa fa-trash"></i> 
     </button>
 </form>
 </center>
