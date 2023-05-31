@@ -15,6 +15,12 @@
 <center>
     <div class="container">
         <div class="chatbox" id="add_tag">
+            <div class="message incoming">
+                <div ><img class="user-photo" src="sozai-rei-yumesaki-hyokkori-1.png"></div>
+                <div class="message-body">
+                    <p>こんにちは！<br>ChatBot Demoアプリです。</p>
+                </div>
+            </div>
             @foreach ($chatreses as $chatres)
             <div class="message outgoing">
                 <div class="message-body">
@@ -54,7 +60,7 @@
     @csrf
     @method('DELETE')
     <button type="submit" class="btn btn-link">
-        <i class="fa fa-trash"></i> 
+        <i class="fa fa-trash">トーク履歴削除</i> 
     </button>
 </form>
 </center>

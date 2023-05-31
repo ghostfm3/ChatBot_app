@@ -14,6 +14,9 @@ function handleFormSubmit(e) {
 
   console.log(prompt_in);
 
+  const outgoingMessage = createMessageHTML("outgoing", prompt_in);
+  appendMessage(outgoingMessage);
+
   const sendData = {
     prompt: prompt_in
   };
@@ -27,7 +30,12 @@ function handleFormSubmit(e) {
     body: JSON.stringify(sendData)
   })
     .then(response => response.json())
-    .then(handleResponse)
+    .then(data => {
+      handleResponse(data);
+      const incomingMessage = createMessageHTML("incoming", data.response);
+      appendMessage(incomingMessage);
+      console.log("成功");
+    })
     .catch(handleError);
 }
 
@@ -36,14 +44,6 @@ function handleResponse(data) {
 
   if (data.status === "success") {
     console.log(data.response);
-
-    const outgoingMessage = createMessageHTML("outgoing", prompt_in);
-    const incomingMessage = createMessageHTML("incoming", data.response);
-
-    appendMessage(outgoingMessage);
-    appendMessage(incomingMessage);
-
-    console.log("成功");
   }
 }
 
