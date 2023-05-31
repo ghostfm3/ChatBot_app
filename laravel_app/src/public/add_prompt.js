@@ -1,58 +1,74 @@
-$(
-    function () {
-    $("#submit_button").on('click', function (e) {
-        console.log("呼び出し");
-        $.ajaxSetup( {
-          headers: {
-            'X-CSRF-TOKEN': $( 'meta[name="csrf-token"]').attr( 'content' )
-          }
-        });
+let prompt_in = '';
 
-        e.preventDefault();
-        const prompt = $('#text').val();
-     
-        
-        console.log(prompt)
-        var senddata = {
-            "prompt":prompt
-        }
-        $.ajax({
-            type: "POST",
-            url: `http://localhost:8090/test`,
-            dataType: 'json',
-            data: senddata
-        }).done( ( res ) =>
-        {
-            console.log("呼び出し")
-            if( res["status"] == "success" )
-            {
-                create_id = res["id"]
-                console.log(res["response"])
-                $('#add_tag').append(`
-                <div class="message outgoing">
-                <div class="message-body">
-                    <p>${prompt}</p>
-                </div>
-                </div>
-                <div class="message incoming">
-                <div ><img class="user-photo" src="sozai-rei-yumesaki-hyokkori-1.png"></div>
-                <div class="message-body">
-                    <p>${res["response"]}</p>
-                </div>
-                </div>
-                `)
+document.addEventListener('DOMContentLoaded', () => {
+  const submitButton = document.querySelector('#submit_button');
+  submitButton.addEventListener('click', handleFormSubmit);
+});
 
-                console.log("成功")
-            }
+function handleFormSubmit(e) {
+  e.preventDefault();
 
-        }).fail( function(XMLHttpRequest, textStatus, errorThrown)
-        {
-        
-            console.log(XMLHttpRequest.status);
-            console.log(textStatus);
-            console.log(errorThrown);
-        }
-        );
-    });
-    }
-);
+  console.log("呼び出し");
+
+  prompt_in = document.querySelector('#text').value;
+
+  console.log(prompt_in);
+
+  const sendData = {
+    prompt: prompt_in
+  };
+
+  fetch('http://localhost:8090/test', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRF-TOKEN': getCSRFToken()
+    },
+    body: JSON.stringify(sendData)
+  })
+    .then(response => response.json())
+    .then(handleResponse)
+    .catch(handleError);
+}
+
+function handleResponse(data) {
+  console.log("呼び出し");
+
+  if (data.status === "success") {
+    console.log(data.response);
+
+    const outgoingMessage = createMessageHTML("outgoing", prompt_in);
+    const incomingMessage = createMessageHTML("incoming", data.response);
+
+    appendMessage(outgoingMessage);
+    appendMessage(incomingMessage);
+
+    console.log("成功");
+  }
+}
+
+function createMessageHTML(className, message) {
+  return `
+    <div class="message ${className}">
+      <div>
+        ${className === "incoming" ? '<img class="user-photo" src="sozai-rei-yumesaki-hyokkori-1.png">' : ''}
+      </div>
+      <div class="message-body">
+        <p>${message}</p>
+      </div>
+    </div>
+  `;
+}
+
+function appendMessage(messageHTML) {
+  const addTag = document.querySelector('#add_tag');
+  addTag.insertAdjacentHTML('beforeend', messageHTML);
+}
+
+function handleError(error) {
+  console.error('Error:', error);
+}
+
+function getCSRFToken() {
+  return document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+}
