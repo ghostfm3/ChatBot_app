@@ -4,7 +4,6 @@
   <meta charset="utf-8">
   <link rel="stylesheet" type="text/css" href="test.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script> -->
   <script src="add_prompt.js"></script>
   <title>ChatBot Demo</title>
 </head>

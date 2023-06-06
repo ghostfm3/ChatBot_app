@@ -18,7 +18,14 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// Route::get('/test',[TestApiController::class, 'index']);
+Route::get('/alpinetest', function() {
+    return view('Alpine_test.alpinetest');
+});
+
+Route::get('/login_sc', function () {
+    return view('login_sc');
+});
+
 Route::resource('test',TestApiController::class);
 Route::delete('/test', [TestApiController::class, 'destroy'])->name('test.destroy');
 

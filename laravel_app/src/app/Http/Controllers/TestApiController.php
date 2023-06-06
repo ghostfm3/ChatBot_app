@@ -15,6 +15,14 @@ class TestApiController extends Controller
         コンストラクタ指定
         */
         $this -> nowTime = date('Y-m-d H:i:s');
+        $this -> url = "http://app:8076/?data=";
+        $this -> apiError = "API取得エラー";
+        $this -> dbError = "DB反映エラー";
+    }
+
+    public function errorLog($errMsg) {
+        $errorMessage = $errMsg->getMessage();
+        return Log::error($errorMessage);
     }
 
     public function index(){ 
@@ -53,9 +61,8 @@ class TestApiController extends Controller
             return json_encode($storeSuccess);
         } catch (\Exception $e) {
             // DB Insertエラー
-            $errorMessage = $e->getMessage();
-            Log::error($errorMessage);
-            $storeError = array('status' => 'error', 'message' => $errorMessage);
+            $this -> errorLog($e);
+            $storeError = array('status' => 'error', 'response' => $this -> dbError);
             return json_encode($storeError);
         }
     }
@@ -64,21 +71,20 @@ class TestApiController extends Controller
         /*
         APIリクエスト処理
         */
-        $url = "http://app:8076/?data=" . $text;
+        $url_fu = $this -> url . $text;
 
         try {
             // APIリクエスト
-            $response = Http::post($url);
+            $response = Http::post($url_fu);
             $responseData = $response->json();
             $res_text = $responseData["response"];
 
             return $res_text;
         } catch (\Exception $e) {
             // レスポンス受け取り失敗時
-            Log::error('APIリクエストエラー: ' . $e->getMessage());
-            $res_text = "API取得エラー";
+            $this -> errorLog($e);
 
-            return $res_text;
+            return $this -> apiError;
         };
     }
 
@@ -91,12 +97,15 @@ class TestApiController extends Controller
             DB::beginTransaction();
             ChatRes::truncate();
             DB::commit();
-        } catch (\Exception $e){
-            Log::error('削除エラー: ' . $e->getMessage());
-            DB::rollBack();
-        }
 
-        return redirect("/test");
+            return redirect("/test");
+        } catch (\Exception $e){
+            $this -> errorLog($e);
+            DB::rollBack();
+            
+            $storeError = array('status' => 'error', 'response' => $this -> dbError);
+            return json_encode($storeError);
+        }
     }
 
 }
